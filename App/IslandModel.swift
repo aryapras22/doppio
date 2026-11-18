@@ -191,7 +191,7 @@ final class IslandModel: ObservableObject {
         guard let id = event.sessionId, let after = store.sessions[id] else { return }
         showPeek(from: before, to: after)
         if event.agent == .claude, event.name == "Stop", before?.state == .working || before?.state == .runningTool {
-            NSSound(named: "Glass")?.play()
+            NSSound(named: "Brewed")?.play()
         }
         recordTotals(after)
         if event.agent == .claude, let path = event.payload["transcript_path"]?.string, !path.isEmpty {

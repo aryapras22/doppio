@@ -7,7 +7,7 @@ APP=build/Doppio.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp .build/release/Doppio "$APP/Contents/MacOS/"
-cp App/Resources/VT323-Regular.ttf App/Resources/AppIcon.icns "$APP/Contents/Resources/"
+cp App/Resources/VT323-Regular.ttf App/Resources/AppIcon.icns App/Resources/Brewed.wav "$APP/Contents/Resources/"
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
