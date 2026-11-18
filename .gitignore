@@ -1,0 +1,8 @@
+.build/
+build/
+.swiftpm/
+.DS_Store
+.plans/
+docs/learning/
+docs/plan.md
+spike/

@@ -1,0 +1,44 @@
+{
+  "agent-island": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "island-bridge agy SessionStart",
+        "timeout": 2
+      }
+    ],
+    "PreInvocation": [
+      {
+        "type": "command",
+        "command": "island-bridge agy PreInvocation",
+        "timeout": 2
+      }
+    ],
+    "PostInvocation": [
+      {
+        "type": "command",
+        "command": "island-bridge agy PostInvocation",
+        "timeout": 2
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "island-bridge agy Stop",
+        "timeout": 2
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "island-bridge agy PostToolUse",
+            "timeout": 2
+          }
+        ]
+      }
+    ]
+  }
+}
