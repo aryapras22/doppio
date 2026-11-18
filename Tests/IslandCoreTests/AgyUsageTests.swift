@@ -32,7 +32,7 @@ final class AgyUsageTests: XCTestCase {
 
     func testLabelsAreShortGroupAndWindow() throws {
         let labels = try AgyUsage.parse(fixture("agy-usage.json")).map(AgyUsage.label)
-        XCTAssertEqual(labels, ["GEMINI WEEK", "GEMINI 5H", "CLAUDE/GPT WEEK", "CLAUDE/GPT 5H", "ARGON WEEK"])
+        XCTAssertEqual(labels, ["WEEKLY", "5-HOUR", "CLAUDE/GPT WEEKLY", "CLAUDE/GPT 5-HOUR", "ARGON WEEKLY"])
     }
 
     func testResetTextCountsDownUnderADayThenShowsWeekdayAndTime() {

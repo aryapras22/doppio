@@ -104,14 +104,14 @@ public enum AgyUsage {
     }
 
     public static func label(_ bucket: AgyQuotaBucket) -> String {
-        let shortGroup: String = switch bucket.group {
-        case "Gemini Models": "GEMINI"
+        let shortGroup: String? = switch bucket.group {
+        case "Gemini Models": nil
         case "Claude and GPT models": "CLAUDE/GPT"
         case "Gemini 4 Argon": "ARGON"
         default: bucket.group.uppercased()
         }
-        let windowSuffix = bucket.window == .fiveHour ? "5H" : "WEEK"
-        return "\(shortGroup) \(windowSuffix)"
+        let windowSuffix = bucket.window == .fiveHour ? "5-HOUR" : "WEEKLY"
+        return shortGroup.map { "\($0) \(windowSuffix)" } ?? windowSuffix
     }
 }
 

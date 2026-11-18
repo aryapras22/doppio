@@ -313,7 +313,7 @@ struct UsageSectionsView: View {
 
     private var agyHeader: some View {
         HStack {
-            Text("AGY USAGE")
+            Text("GEMINI USAGE")
                 .font(Theme.readout(13))
                 .foregroundStyle(Color.mocha)
             Spacer(minLength: 0)
