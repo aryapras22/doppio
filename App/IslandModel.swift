@@ -167,6 +167,11 @@ final class IslandModel: ObservableObject {
     // MARK: actions
 
     func stop(_ session: Session) {
+        // A bare SIGTERM on agy makes the cc-agy runner record the run as failed; cancel records it as cancelled.
+        if session.agent == .agy, let task = session.taskId {
+            let ccAgy = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin/cc-agy")
+            if (try? Process.run(ccAgy, arguments: ["cancel", task])) != nil { return }
+        }
         guard let pid = session.pid else { return }
         kill(pid, SIGTERM)
     }
