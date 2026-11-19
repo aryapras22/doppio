@@ -61,17 +61,15 @@ struct CollapsedPill: View {
     @ObservedObject var model: IslandModel
 
     private var summary: (text: String, color: Color) {
-        var parts: [String] = []
-        if model.orderUpCount > 0 { parts.append("\(model.orderUpCount) ORDER UP") }
-        if model.brewingCount > 0 { parts.append("\(model.brewingCount) BREWING") }
-        if parts.isEmpty { return ("\(model.live.count) ON WARMER", .mocha) }
-        return (parts.joined(separator: " · "), model.orderUpCount > 0 ? .tomato : .amber)
+        if model.orderUpCount > 0 { return ("\(model.orderUpCount)", .tomato) }
+        if model.brewingCount > 0 { return ("\(model.brewingCount)", .amber) }
+        return ("\(model.live.count)", .mocha)
     }
 
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 6) {
-                ForEach(model.live.prefix(4)) { CupView(session: $0, scale: 1.5) }
+                ForEach(model.live.prefix(1)) { CupView(session: $0, scale: 1.5) }
             }
             .frame(width: IslandGeometry.wing - 10, alignment: .leading)
             .padding(.leading, 10)

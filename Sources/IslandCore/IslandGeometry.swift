@@ -34,7 +34,7 @@ public enum IslandGeometry {
     public static let expandedWidth: CGFloat = 440
     public static let peekWidth: CGFloat = 380
     public static let peekBodyHeight: CGFloat = 64
-    public static let wing: CGFloat = 120
+    public static let wing: CGFloat = 30
 
     public static func shapeSize(
         mode: IslandMode,
