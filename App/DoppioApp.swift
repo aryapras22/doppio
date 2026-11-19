@@ -122,18 +122,21 @@ struct MenuRow: View {
     let indented: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            Rectangle().fill(session.stateColor).frame(width: 8, height: 8).padding(.top, 4)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(session.agent == .claude ? "Claude Code" : "agy \(session.rowTitle)").font(Theme.name(13)).foregroundStyle(Color.latte).lineLimit(1)
-                Text("\(session.model ?? "unknown model") · \(session.contextText)")
-                    .font(Theme.readout(12)).foregroundStyle(session.contextColor).lineLimit(1)
+        HStack(spacing: 8) {
+            HStack(alignment: .top, spacing: 10) {
+                Rectangle().fill(session.stateColor).frame(width: 8, height: 8).padding(.top, 4)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(session.agent == .claude ? "Claude Code" : "agy \(session.rowTitle)").font(Theme.name(13)).foregroundStyle(Color.latte).lineLimit(1)
+                    Text("\(session.model ?? "unknown model") · \(session.contextText)")
+                        .font(Theme.readout(12)).foregroundStyle(session.contextColor).lineLimit(1)
+                }
+                Spacer(minLength: 8)
+                Text(session.state == .runningTool ? "GRINDING" : session.stateLabel).font(Theme.readout(14)).foregroundStyle(session.stateColor).lineLimit(1)
             }
-            Spacer(minLength: 8)
-            Text(session.state == .runningTool ? "GRINDING" : session.stateLabel).font(Theme.readout(14)).foregroundStyle(session.stateColor).lineLimit(1)
+            .contentShape(Rectangle())
+            .onTapGesture { model.jump(to: session) }
+            sessionActionButton(model: model, session: session)
         }
         .padding(.leading, indented ? 20 : 0)
-        .contentShape(Rectangle())
-        .onTapGesture { model.jump(to: session) }
     }
 }

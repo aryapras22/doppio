@@ -402,6 +402,29 @@ private struct UsageRow: View {
     }
 }
 
+@MainActor
+@ViewBuilder
+func sessionActionButton(model: IslandModel, session: Session) -> some View {
+    let working = session.state == .working || session.state == .runningTool
+    let action: (icon: String, color: Color, help: String, run: () -> Void)? =
+        if working, session.pid != nil {
+            ("stop.circle", .tomato, "Stop agent", { model.stop(session) })
+        } else if session.state == .idle || session.state == .failed || (session.pid == nil && !working) {
+            ("xmark.circle", .mocha, "Remove from list", { model.remove(session) })
+        } else {
+            nil
+        }
+    if let action {
+        Button(action: action.run) {
+            Image(systemName: action.icon)
+                .font(.system(size: 11))
+                .foregroundStyle(action.color)
+        }
+        .buttonStyle(.plain)
+        .help(action.help)
+    }
+}
+
 struct IslandRow: View {
     @ObservedObject var model: IslandModel
     let session: Session
@@ -409,29 +432,32 @@ struct IslandRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            if indented {
-                Text("└").font(Theme.readout(16)).foregroundStyle(Color.mocha).frame(width: 12)
+            HStack(spacing: 8) {
+                if indented {
+                    Text("└").font(Theme.readout(16)).foregroundStyle(Color.mocha).frame(width: 12)
+                }
+                PixelView(sprite: Sprites.robot(for: session.agent), scale: indented ? 1.75 : 2)
+                    .frame(width: 28)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(session.rowTitle).font(Theme.name(13)).foregroundStyle(Color.latte).lineLimit(1)
+                    Text(model.subtitle(for: session)).font(Theme.readout(12)).foregroundStyle(Color.mocha).lineLimit(1)
+                }
+                Spacer(minLength: 8)
+                VStack(alignment: .trailing, spacing: 0) {
+                    Text(session.stateLabel).font(Theme.readout(16)).foregroundStyle(session.stateColor)
+                        .shadow(color: session.stateColor.opacity(0.5), radius: 1).lineLimit(1)
+                    Text("CTX \(session.contextText.dropFirst(4).uppercased()) · \(session.tokenText)")
+                        .font(Theme.readout(12)).foregroundStyle(session.contextColor)
+                }
+                .layoutPriority(1)
+                CupView(session: session, scale: 2)
             }
-            PixelView(sprite: Sprites.robot(for: session.agent), scale: indented ? 1.75 : 2)
-                .frame(width: 28)
-            VStack(alignment: .leading, spacing: 0) {
-                Text(session.rowTitle).font(Theme.name(13)).foregroundStyle(Color.latte).lineLimit(1)
-                Text(model.subtitle(for: session)).font(Theme.readout(12)).foregroundStyle(Color.mocha).lineLimit(1)
-            }
-            Spacer(minLength: 8)
-            VStack(alignment: .trailing, spacing: 0) {
-                Text(session.stateLabel).font(Theme.readout(16)).foregroundStyle(session.stateColor)
-                    .shadow(color: session.stateColor.opacity(0.5), radius: 1).lineLimit(1)
-                Text("CTX \(session.contextText.dropFirst(4).uppercased()) · \(session.tokenText)")
-                    .font(Theme.readout(12)).foregroundStyle(session.contextColor)
-            }
-            .layoutPriority(1)
-            CupView(session: session, scale: 2)
+            .contentShape(Rectangle())
+            .onTapGesture { model.jump(to: session) }
+            sessionActionButton(model: model, session: session)
         }
         .padding(.leading, indented ? 36 : 18)
         .padding(.trailing, 18)
-        .contentShape(Rectangle())
-        .onTapGesture { model.jump(to: session) }
     }
 }
 

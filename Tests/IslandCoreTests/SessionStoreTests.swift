@@ -32,6 +32,17 @@ final class SessionStoreTests: XCTestCase {
         XCTAssertEqual(store.sessions["c1"]?.state, .idle)
     }
 
+    func testRemoveDropsSessionUntilItsNextEvent() {
+        var store = SessionStore()
+        store.apply(claude("Stop", pid: 42))
+        store.remove(id: "c1")
+        XCTAssertNil(store.sessions["c1"])
+
+        store.apply(claude("UserPromptSubmit", ts: 200))
+        XCTAssertEqual(store.sessions["c1"]?.state, .working)
+        XCTAssertEqual(store.sessions["c1"]?.startedAt, 200)
+    }
+
     func testAgyStopOnlyIdlesWhenFullyIdleAndFailsOnError() {
         var store = SessionStore()
         store.apply(agy("PreInvocation"))

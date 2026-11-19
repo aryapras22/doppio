@@ -76,6 +76,10 @@ public struct SessionStore: Equatable, Sendable {
         sessions[sessionId] = s
     }
 
+    public mutating func remove(id: String) {
+        sessions.removeValue(forKey: id)
+    }
+
     public mutating func apply(_ event: BridgeEvent) {
         guard let id = event.sessionId, !id.isEmpty else { return }
         var s = sessions[id] ?? Session(id: id, agent: event.agent, project: "unknown", startedAt: event.ts, lastEventAt: event.ts)

@@ -166,6 +166,15 @@ final class IslandModel: ObservableObject {
 
     // MARK: actions
 
+    func stop(_ session: Session) {
+        guard let pid = session.pid else { return }
+        kill(pid, SIGTERM)
+    }
+
+    func remove(_ session: Session) {
+        store.remove(id: session.id)
+    }
+
     func jump(to session: Session) {
         if session.agent == .agy, let task = session.taskId {
             NSWorkspace.shared.open(RunStore.dir(for: task).appendingPathComponent("result.txt"))
