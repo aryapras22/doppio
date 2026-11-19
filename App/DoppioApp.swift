@@ -71,15 +71,22 @@ struct MenuView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            if model.rows.isEmpty {
-                Text("NO CUPS BREWING").font(Theme.readout(16)).foregroundStyle(Color.mocha)
-            }
-            ForEach(model.projects, id: \.name) { project in
-                Text(project.name.uppercased()).font(Theme.readout(14)).foregroundStyle(Color.mocha)
-                ForEach(project.rows) { item in
-                    MenuRow(model: model, session: item.session, indented: item.indented)
+            // Fixed height: a window whose content resizes while open is misplaced by MenuBarExtra.
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    if model.rows.isEmpty {
+                        Text("NO CUPS BREWING").font(Theme.readout(16)).foregroundStyle(Color.mocha)
+                    }
+                    ForEach(model.projects, id: \.name) { project in
+                        Text(project.name.uppercased()).font(Theme.readout(14)).foregroundStyle(Color.mocha)
+                        ForEach(project.rows) { item in
+                            MenuRow(model: model, session: item.session, indented: item.indented)
+                        }
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(height: 180)
             Divider().overlay(Color.roast)
             UsageSectionsView(model: model, inlineReset: false, collapsible: false)
             Divider().overlay(Color.roast)
